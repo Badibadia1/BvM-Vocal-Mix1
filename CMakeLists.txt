@@ -74,7 +74,7 @@ if(BVM_BUILD_PLUGIN)
     target_compile_options(BvM PRIVATE -Wall -Wextra -Wpedantic)
   endif()
   target_link_libraries(BvM
-    PRIVATE juce::juce_audio_utils juce::juce_dsp
+    PRIVATE juce::juce_audio_utils juce::juce_dsp juce::juce_cryptography
     PUBLIC juce::juce_recommended_config_flags juce::juce_recommended_lto_flags)
 endif()
-juce::juce_cryptography
+
