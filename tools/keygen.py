@@ -1,14 +1,28 @@
 #!/usr/bin/env python3
-"""Générateur de codes d'activation BvM (à GARDER PRIVÉ, ne jamais distribuer).
-Usage : python3 keygen.py XXXX-XXXX-XXXX-XXXX     (ID machine envoyé par le client)
-Le SECRET doit être identique à License::kSecret dans Source/License.h.
+"""Keygen BvM : génère le code d'activation à partir de l'ID machine.
+
+Usage :
+    keygen <ID_MACHINE>
+    keygen                 (le programme demande l'ID)
+
+Le secret doit être IDENTIQUE à kSecret dans Source/License.h.
+Ordre de recherche du secret :
+    1. variable d'environnement BVM_SECRET
+    2. fichier secret.txt placé à côté du programme
+    3. valeur par défaut ci-dessous
 """
-import hashlib, sys
+import hashlib
+import os
+import sys
 
-SECRET = "CHANGE-MOI-SECRET-LONG-ET-ALEATOIRE-2026"
+DEFAULT_SECRET = "CHANGE-MOI-SECRET-LONG-ET-ALEATOIRE-2026"
 
-if len(sys.argv) != 2:
-    sys.exit("Usage : keygen.py <ID-MACHINE>")
-mid = sys.argv[1].strip().upper()
-h = hashlib.sha256(f"{SECRET}:{mid}".encode("utf-8")).hexdigest().upper()[:20]
-print("-".join(h[i:i + 5] for i in range(0, 20, 5)))
+
+def load_secret() -> str:
+    env = os.environ.get("BVM_SECRET")
+    if env:
+        return env
+    base = os.path.dirname(sys.executable if getattr(sys, "frozen", False)
+                           else os.path.abspath(__file__))
+    path = os.path.join(base, "secret.txt")
+    if os.path.isfile(path):
