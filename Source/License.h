@@ -2,6 +2,7 @@
 // BvM - Licence : essai 24 h, activation liée à l'ordinateur, persistante après réinstallation.
 // L'état est stocké HORS du dossier du plugin (2 fichiers + registre sous Windows), signé par HMAC-like SHA-256.
 #include <juce_core/juce_core.h>
+#include <juce_cryptography/juce_cryptography.h>
 #include <mutex>
 #include <atomic>
 #include <limits>
@@ -16,7 +17,7 @@ public:
     static constexpr const char* kSecret = "CHANGE-MOI-SECRET-LONG-ET-ALEATOIRE-2026";
     // 0 = pas d'essai : le plugin reste muet tant que le code d'activation de CET ordinateur n'est pas saisi.
     // Mettre 24 * 3600 pour réactiver un essai de 24 h.
-    static constexpr juce::int64 kTrialSec = 0;
+    static constexpr juc = 0;
 
     std::atomic<juce::int64> expiry { 0 };     // secondes epoch ; max() si activé
     std::atomic<bool> activated { false };
