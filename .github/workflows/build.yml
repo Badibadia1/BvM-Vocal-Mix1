@@ -1,0 +1,42 @@
+name: Build BvM
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Récupérer le code source
+        uses: actions/checkout@v4
+
+      - name: Vérifier CMake
+        run: cmake --version
+
+      - name: Configurer BvM
+        run: cmake -S . -B build -DBVM_BUILD_PLUGIN=ON -DBVM_BUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Release
+
+      - name: Compiler BvM
+        run: cmake --build build --config Release --parallel 2
+
+      - name: Exécuter les tests DSP
+        run: ctest --test-dir build -C Release --output-on-failure
+
+      - name: Publier les formats compilés
+        uses: actions/upload-artifact@v4
+        with:
+          name: BvM-${{ runner.os }}-Release
+          path: build/BvM_artefacts/Release/
+          if-no-files-found: error
+          retention-days: 14
