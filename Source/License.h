@@ -17,8 +17,7 @@ public:
     static constexpr const char* kSecret = "CHANGE-MOI-SECRET-LONG-ET-ALEATOIRE-2026";
     // 0 = pas d'essai : le plugin reste muet tant que le code d'activation de CET ordinateur n'est pas saisi.
     // Mettre 24 * 3600 pour réactiver un essai de 24 h.
-    static constexpr juc = 0;
-
+static constexpr juce::int64 kTrialSec = 0;
     std::atomic<juce::int64> expiry { 0 };     // secondes epoch ; max() si activé
     std::atomic<bool> activated { false };
 
